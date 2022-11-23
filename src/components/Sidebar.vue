@@ -6,7 +6,7 @@
           <img style="height: 2rem;" src="../../static/img/logo.png"/>
      <!--   <i class="fab fa-gofore"></i>-->
         </div>
-        <div class="sidebar-brand-text mx-3">GestIB2Google</div>
+        <div class="sidebar-brand-text mx-3">GestIB2Google Premium</div>
     </router-link>
 
     <!-- Divider -->

@@ -28,6 +28,12 @@
           <div class="form-group">
               <div class="form-check">
                 <label class="form-check-label">
+                <input class="form-check-input" id="onlystudents" name="onlystudents" type="checkbox" v-model="onlystudents" :disabled="loading"> Només alumnat</label>
+              </div>
+          </div>
+          <div class="form-group">
+              <div class="form-check">
+                <label class="form-check-label">
                 <input class="form-check-input" id="onlyactive" name="onlyactive" type="checkbox" v-model="onlyactive" :disabled="loading"> Només usuaris actius</label>
               </div>
           </div>
@@ -49,6 +55,13 @@
               <div class="form-check">
                 <label class="form-check-label">
                   <input class="form-check-input" id="onlywithoutorgunit" name="onlywithoutorgunit" type="checkbox" v-model="onlywithoutorgunit" :disabled="loading"> Només els usuaris de la Unitat Organitzativa principal (/)
+                </label>
+              </div>
+            </div>
+		 <div class="form-group">
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input class="form-check-input" id="onlydisabledwithgroups" name="onlydisabledwithgroups" type="checkbox" v-model="onlydisabledwithgroups" :disabled="loading"> Usuaris desactivats que pertanyen a algun grup
                 </label>
               </div>
             </div>
@@ -74,7 +87,7 @@
     <!-- Taula mostrar usuaris -->
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Usuaris</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Usuaris trobats: {{ users.length }}</h6>
       </div>
       <div class="card-body">
         <div class="table-responsive">
@@ -102,7 +115,7 @@
               </tr>
               <tr v-for="user in users" v-bind:key="user.id">
                 <td>{{ user.surname + ', ' + user.name }}</td>
-                <td>{{ user.domainemail }}</td>
+                <td><a target='_blank' :href="'https://admin.google.com/ac/search?query='+user.domainemail">{{ user.domainemail }}</a></td>
                 <td>{{ user.teacher ? 'PROFESSOR' : 'Alumne' }}</td>
                 <td>{{ user.groups.join(', ') }}</td>
                 <td>{{ user.organizationalUnit }}</td>
@@ -125,7 +138,7 @@ export default {
     return {
       group: '',
       onlyteachers: false,
-      onlyactive: true,
+      onlyactive: false,
       onlywithoutcode: false,
       onlynotsession: false,
       onlywithoutorgunit: false,
@@ -147,14 +160,19 @@ export default {
           this.errors.push('Error llegint usuaris "' + err.message + '"')
         } else {
           Object.keys(users).forEach(user => {
+		    //console.log(users[user]);
             if (!this.onlywithoutcode || users[user].withoutcode || (users[user].id.length < 15)) {
               if (!this.onlynotsession || (users[user].lastLoginTime.getFullYear() < 1980)) {
                 if (!this.onlywithoutorgunit || (users[user].organizationalUnit === '/')) {
                   if (!this.onlyteachers || users[user].teacher) {
+				  if (!this.onlystudents || !users[user].teacher) {
                     if (!this.onlyactive || !users[user].suspended) {
+					  if (!this.onlydisabledwithgroups || (users[user].suspended && users[user].groups.length>0)){
                       if (!this.group || users[user].groups.includes(this.group)) {
                         this.users.push(users[user])
                       }
+					  }
+					  }
                     }
                   }
                 }
