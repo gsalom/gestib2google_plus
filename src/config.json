@@ -10,7 +10,7 @@
     "organizationalUnitStudents": "/Alumnat",
     "organizationalUnitStudentsWithGroups": true,
     "teachersEmailPrefix": "",
-    "teachersEmailFormat": "nP",
+    "teachersEmailFormat": "nPs",
     "teachersEmailCustomDomain": "",
     "studentsEmailPrefix": "",
     "studentsEmailFormat": "nPS",
