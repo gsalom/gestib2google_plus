@@ -187,6 +187,10 @@ const getDomainUsers = (logs, callback) => {
           withoutcode = true
         }
 
+       // if (user.primaryEmail=="storressouto@cifpfbmoll.eu") {
+       //     console.log(user);
+       // }
+      
         // Afegim tots els grups del que és membre
         let groupMember = []
         Object.keys(groups).forEach(groupname => {
@@ -194,6 +198,9 @@ const getDomainUsers = (logs, callback) => {
             if (user.primaryEmail === m) {
               groupMember.push(groupname)
             }
+            //if (user.primaryEmail=="storressouto@cifpfbmoll.eu") {
+            //  console.log(groups[groupname].name + "->" + groups[groupname].members);
+          //}
           })
         })
 
