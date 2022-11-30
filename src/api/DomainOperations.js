@@ -5,14 +5,7 @@ import {config} from '@/config'
 /**
  * Aplicar al domini l'eliminació d'un usuari
  */
-const applyDeletedomainUser = (logs, domainUser) => {
-  // Suspendre l'usuari del domini
-  oauth2ClientServiceAdmin().users.update({
-    userKey: domainUser.email(),
-    resource: {
-      suspended: true
-    }
-  }, (err) => { if (err) logs.push('ERROR de l\'API de Google: ' + err) })
+const applyDeletedomainUser = async (logs, domainUser) => {
   // Eliminar tots els grups
   let groupsWithDomain = domainUser.groupsWithDomain()
   for (let i in groupsWithDomain) {
@@ -22,6 +15,22 @@ const applyDeletedomainUser = (logs, domainUser) => {
       memberKey: domainUser.email()
     }, (err) => { if (err) logs.push('ERROR de l\'API de Google: ' + err) })
   }
+
+  // Canvia a les unitats EX
+  let orgunit = config().organizationalUnitExStudents;
+  if (domainUser.orgUnitPath===config().organizationalUnitTeachers){
+    orgunit=config().organizationalUnitExTeachers;
+  }
+ 
+  // Suspendre l'usuari del domini
+  oauth2ClientServiceAdmin().users.update({
+    userKey: domainUser.email(),
+    resource: {
+      suspended: true,
+      orgUnitPath: orgunit
+    }
+  }, (err) => { if (err) logs.push('ERROR de l\'API de Google: ' + err) })
+
 }
 
 /**
@@ -169,7 +178,7 @@ const getNewDomainEmail = (xmlUser, domainUsers) => {
 /**
  * Cream l'usuari del XML que no està al domini
  */
-const createDomainUser = (logs, apply, xmlUser, domainUsers, domainGroups, domainGroupsCount) => {
+ const createDomainUser = async (logs, apply, xmlUser, domainUsers, domainGroups, domainGroupsCount) => {
   let countCreated = 1
   let countGroupsCreated = 0
 
@@ -219,6 +228,10 @@ const createDomainUser = (logs, apply, xmlUser, domainUsers, domainGroups, domai
         password: config().defaultPassword // Default password
       }
     }, (err) => { if (err) logs.push('ERROR de l\'API de Google: ' + err) })
+    
+    // Aquí hem d'esperar que l'usuari sigui creat per Google abans de ficar-lo dins els grups
+    await new Promise(r => setTimeout(r, 2000));
+
     // Insert all groupPrefixTeachers, groupPrefixStudents and groupPrefixTutors groups
     for (let gr in xmlUser.groupsWithPrefixAdded()) {
       // https://developers.google.com/admin-sdk/directory/v1/reference/members/insert

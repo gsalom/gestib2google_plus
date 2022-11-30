@@ -34,8 +34,16 @@
           <input class="form-control" id="organizationalUnitTeachers" name="organizationalUnitTeachers" type="text" v-model="organizationalUnitTeachers" disabled>
         </div>
         <div class="form-group">
+          <label for="organizationalUnitExTeachers">Nom de l'Unitat Organitzativa de l'Exprofessorat</label>
+          <input class="form-control" id="organizationalUnitExTeachers" name="organizationalUnitExTeachers" type="text" v-model="organizationalUnitExTeachers" disabled>
+        </div>
+        <div class="form-group">
           <label for="organizationalUnitStudents">Nom de l'Unitat Organitzativa de l'alumnat</label>
           <input class="form-control" id="organizationalUnitStudents" name="organizationalUnitStudents" type="text" v-model="organizationalUnitStudents" disabled>
+        </div>
+        <div class="form-group">
+          <label for="organizationalUnitExStudents">Nom de l'Unitat Organitzativa de l'Exalumnat</label>
+          <input class="form-control" id="organizationalUnitExStudents" name="organizationalUnitExStudents" type="text" v-model="organizationalUnitExStudents" disabled>
         </div>
         <div class="form-group">
           <label for="organizationalUnitStudentsWithGroups">Configuració de les unitats organitzatives de l'alumnat</label>
@@ -130,6 +138,8 @@ export default {
     this.groupPrefixTutors = config().groupPrefixTutors
     this.organizationalUnitTeachers = config().organizationalUnitTeachers
     this.organizationalUnitStudents = config().organizationalUnitStudents
+    this.organizationalUnitExTeachers = config().organizationalUnitExTeachers
+    this.organizationalUnitExStudents = config().organizationalUnitExStudents
     this.organizationalUnitStudentsWithGroups = config().organizationalUnitStudentsWithGroups
     this.teachersEmailPrefix = config().teachersEmailPrefix
     this.teachersEmailFormat = config().teachersEmailFormat

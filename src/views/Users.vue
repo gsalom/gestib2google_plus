@@ -58,7 +58,7 @@
                 </label>
               </div>
             </div>
-		 <div class="form-group">
+		      <div class="form-group">
               <div class="form-check">
                 <label class="form-check-label">
                   <input class="form-check-input" id="onlydisabledwithgroups" name="onlydisabledwithgroups" type="checkbox" v-model="onlydisabledwithgroups" :disabled="loading"> Usuaris desactivats que pertanyen a algun grup
