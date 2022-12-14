@@ -28,6 +28,14 @@
         </router-link>
     </li>
 
+    <!-- Nav Item - Utils Usuaris -->
+    <li class="nav-item">
+        <router-link to="/utilsusers" class="nav-link">
+          <i class="fas fa-fw fa-ghost"></i>
+          <span>Utilitats Usuaris</span>
+        </router-link>
+    </li>
+
     <!-- Nav Item - Usuaris -->
     <li class="nav-item">
         <router-link to="/users" class="nav-link">

@@ -34,6 +34,11 @@ let router = new Router({
       component: () => import('@/views/ImportXml')
     },
     {
+      path: '/utilsusers',
+      name: 'UtilsUsers',
+      component: () => import('@/views/UtilsUsers')
+    },
+    {
       path: '/setup',
       name: 'Setup',
       component: () => import('@/views/Setup')

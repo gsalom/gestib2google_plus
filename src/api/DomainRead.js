@@ -22,7 +22,7 @@ const getDomainGroupsStudents = (domainGroups, nextPageToken, callback) => {
     const groups = res.data.groups
     groups.forEach((group) => {
       // Carregam nomes grups d'alumnat
-      if (group.email.startsWith(config().groupPrefixStudents)) {
+      if ((group.email.startsWith(config().groupPrefixStudents))||(group.email.startsWith(config().groupPrefixDelegats))) {
         domainGroups[group.email.replace('@' + config().domain, '')] = {
           'email': group.email.replace('@' + config().domain, ''),
           'id': group.id,
@@ -186,10 +186,6 @@ const getDomainUsers = (logs, callback) => {
           id = 'WITHOUTCODE' + userWithoutCode
           withoutcode = true
         }
-
-       // if (user.primaryEmail=="storressouto@cifpfbmoll.eu") {
-       //     console.log(user);
-       // }
       
         // Afegim tots els grups del que és membre
         let groupMember = []
@@ -198,9 +194,6 @@ const getDomainUsers = (logs, callback) => {
             if (user.primaryEmail === m) {
               groupMember.push(groupname)
             }
-            //if (user.primaryEmail=="storressouto@cifpfbmoll.eu") {
-            //  console.log(groups[groupname].name + "->" + groups[groupname].members);
-          //}
           })
         })
 

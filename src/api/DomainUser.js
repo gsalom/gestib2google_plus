@@ -82,11 +82,11 @@ class DomainUser {
       email = email.replace('p', '¢').replace('P', '£')
       email = email.replace('s', '¥').replace('S', '«')
       // Reemplaçam els caràcters invàlids per nom i llinatges
-      email = email.replace('©', normalizedName(this.name.substring(0, 1)))
+      email = email.replace('©', this.name.toLowerCase().substring(0, 1))
       email = email.replace('¡', normalizedName(this.name))
       email = email.replace('¢', normalizedName(this.surname1.substring(0, 1)))
       email = email.replace('£', normalizedName(this.surname1))
-      email = email.replace('¥', normalizedName(this.surname2.substring(0, 1)))
+      email = email.replace('¥', normalizedName(this.surname2).toLowerCase().substring(0, 1))
       email = email.replace('«', normalizedName(this.surname2))
       if (numero) {
         // Si hi ha numero, l'afegim a l'email per evitar col·lisions

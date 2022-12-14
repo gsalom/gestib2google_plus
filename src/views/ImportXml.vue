@@ -130,7 +130,7 @@ export default {
                   this.loading = false
                 } else {
                   // Aplicam els canvis al domini
-                  applyDomainChanges(this.logs, xmlusers, domainusers, domaingroups, apply, this.group, this.onlyteachers, (err, count) => {
+                  applyDomainChanges(this.logs, xmlusers, domainusers, domaingroups, apply, this.group, this.onlyteachers, false, (err, count) => {
                     if (err) {
                       this.errors.push('Error aplicant els canvis al domini "' + err.message + '"')
                       this.loading = false

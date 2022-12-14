@@ -34,6 +34,48 @@ const applyDeletedomainUser = async (logs, domainUser) => {
 }
 
 /**
+ * Esborrar dels grups els usuaris desactivats que no estan al XML
+ */
+ const purgeGroupsDomainUsers = (logs, domainUsers, apply, selectedGroup, onlyTeachers) => {
+  let countPurged = 0
+  logs.push('Purgant dels grups usuaris desactivats del domini  ...')
+  for (let userid in domainUsers) { // Per cada usuari del domini
+    let domainUser = domainUsers[userid]
+    if (domainUser.suspended) {
+        // Aplicar només al grup seleccionat
+        if (!selectedGroup || domainUser.groups.includes(selectedGroup)) {
+          if (domainUser.groups.length>0) {
+          // Si només hem escollit professors...
+          if (!onlyTeachers || domainUser.teacher) {
+            // Aplicar només les unitats organitzatives 'Professorat', 'Alumnat','ExProfessorat', 'ExAlumnat' i  '/'
+            if (['/', config().organizationalUnitTeachers, config().organizationalUnitStudents, config().organizationalUnitExTeachers, config().organizationalUnitExStudents].includes(domainUser.organizationalUnit)) {
+              logs.push('PURGAR: ' + domainUser.toString())
+              countPurged++
+if (apply) {
+      // Actualitzam els grups de l'usuari
+      for (let gr in domainUser.groups) {
+        // https://developers.google.com/admin-sdk/directory/v1/reference/members/delete
+        oauth2ClientServiceAdmin().members.delete({
+          groupKey:domainUser.groups[gr] + '@' + config().domain,
+          memberKey: domainUser.email()
+        }, (err) => { if (err) logs.push('ERROR de l\'API de Google: ' + err) })
+      }    
+            }
+          }
+          }
+                 
+        }        
+      }
+    }
+  }
+  return countPurged
+}
+
+
+
+
+
+/**
  * Esborrar del domini els usuaris que no estan al XML
  */
 const deleteDomainUsers = (logs, xmlUsers, domainUsers, apply, selectedGroup, onlyTeachers) => {
@@ -259,6 +301,7 @@ const getNewDomainEmail = (xmlUser, domainUsers) => {
 const updateActivateDomainUser = (logs, apply, xmlUser, domainUser) => {
   let countActivated = 0
   if (domainUser.suspended) {
+    domainUser.suspended=false;
     logs.push('ACTIVAR: ' + xmlUser.toString())
     countActivated++
     if (apply) {
@@ -269,6 +312,7 @@ const updateActivateDomainUser = (logs, apply, xmlUser, domainUser) => {
           suspended: false
         }
       }, (err) => { if (err) logs.push('ERROR de l\'API de Google: ' + err) })
+      
     }
   }
   return countActivated
@@ -323,7 +367,7 @@ const addDomainUsers = (logs, xmlUsers, domainUsers, domainGroups, apply, select
           // Afegim l'usuari al domini
           let countCreate = createDomainUser(logs, apply, xmlUser, domainUsers, domainGroups, domainGroupsCount)
           countGroupsCreated = countGroupsCreated + countCreate.countGroupsCreated
-          countCreated = countCreated + countCreate.countCreated
+          countCreated = countCreated + 1
         }
       }
     } else {
@@ -334,7 +378,7 @@ const addDomainUsers = (logs, xmlUsers, domainUsers, domainGroups, apply, select
         // Si només hem escollit professors...
         if (!onlyTeachers || xmlUser.teacher || domainUser.teacher) {
           // Aplicar només les unitats organitzatives 'Professorat', 'Alumnat' i '/'
-          if (['/', config().organizationalUnitTeachers, config().organizationalUnitStudents].includes(domainUser.organizationalUnit)) {
+          if (['/', config().organizationalUnitTeachers, config().organizationalUnitStudents, config().organizationalUnitExTeachers, config().organizationalUnitExStudents].includes(domainUser.organizationalUnit))   {
             // Actualitzam el seu estat de 'activat'
             countActivated = countActivated + updateActivateDomainUser(logs, apply, xmlUser, domainUser)
             let creategroups = xmlUser.groupsWithPrefixAdded().filter(
@@ -364,11 +408,23 @@ const addDomainUsers = (logs, xmlUsers, domainUsers, domainGroups, apply, select
 /**
  * Aplicar els canvis del XML al domini de Google
  */
-const applyDomainChanges = (logs, xmlUsers, domainUsers, domainGroups, apply, selectedGroup, onlyTeachers, callback) => {
-  let countDeleted = deleteDomainUsers(logs, xmlUsers, domainUsers, apply, selectedGroup, onlyTeachers)
-  let count = addDomainUsers(logs, xmlUsers, domainUsers, domainGroups, apply, selectedGroup, onlyTeachers)
-  count.deleted = countDeleted
-  callback(null, count)
+const applyDomainChanges = (logs, xmlUsers, domainUsers, domainGroups, apply, selectedGroup, onlyTeachers, onlypurge, callback) => {
+  // Inicialitzar comptadors a zero
+  let count = new Object();
+  count.deleted=0; count.purged=0; count.created=0; count.activated=0;
+  count.membersmodified=0; count.orgunitmodified=0; count.groupscreated=0;
+  if(onlypurge) {
+    let countPurged = purgeGroupsDomainUsers(logs, domainUsers, apply, selectedGroup, onlyTeachers)
+    count.purged = countPurged
+    }
+  else
+    {  
+    let countDeleted = deleteDomainUsers(logs, xmlUsers, domainUsers, apply, selectedGroup, onlyTeachers)
+    count = addDomainUsers(logs, xmlUsers, domainUsers, domainGroups, apply, selectedGroup, onlyTeachers)
+    count.deleted = countDeleted
+    count.purged=0
+    }
+    callback(null, count)
 }
 
 export {applyDomainChanges}

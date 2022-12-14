@@ -58,6 +58,16 @@
                 </label>
               </div>
             </div>
+            <div class="form-group">
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input class="form-check-input" id="onlywiththistext" name="onlywiththistext" type="checkbox" v-model="onlywiththistext" :disabled="loading"> Usuaris amb aquest text dins l'email
+                  <br>
+                  <input class="form-text-input" id="submail" name="submail" type="text" v-model="submail" :disabled="loading">
+    
+                </label>
+              </div>
+            </div>           
 		      <div class="form-group">
               <div class="form-check">
                 <label class="form-check-label">
@@ -160,7 +170,7 @@ export default {
           this.errors.push('Error llegint usuaris "' + err.message + '"')
         } else {
           Object.keys(users).forEach(user => {
-		    //console.log(users[user]);
+        if (!this.onlywiththistext || users[user].domainemail.includes(this.submail)){
             if (!this.onlywithoutcode || users[user].withoutcode || (users[user].id.length < 15)) {
               if (!this.onlynotsession || (users[user].lastLoginTime.getFullYear() < 1980)) {
                 if (!this.onlywithoutorgunit || (users[user].organizationalUnit === '/')) {
@@ -178,7 +188,8 @@ export default {
                 }
               }
             }
-          })
+          }
+        })
         }
         this.loading = false
         this.$bvModal.show('modal-ok')
