@@ -64,6 +64,14 @@ docker-compose down
 
 Per anar a l'aplicació web, s'ha d'obrir l'adreça [http://localhost:8080](http://localhost:8080)
 
+## Darreres modificacions i millores
+
+- Afegides noves cerques d'usuaris amb diferents filtres dins la vista usuaris del domini
+- Afegit enllaç l'admin.google.com a partir de l'email de l'usuari per poder corregir errors
+- Millores fetes a l'alta d'usuari: afegeix l'usuari als grups que ha de ser membre, elimina el caracter _ a l'email
+- Millora feta al suspendre un usuari: l'eliminia dels grups que pertany i el canvia a l'unitat organitzativa ExAlumnat o Exprofessorat segons el cas
+- Nova vista per fer operacions massives amb els usuaris. Com purga dels usuaris desactivats que encara estan dins grups
+
 ## Crèdits
 
 Basat en el tema [Start Bootstrap SB Admin 2](https://github.com/BlackrockDigital/startbootstrap-sb-admin-2)
