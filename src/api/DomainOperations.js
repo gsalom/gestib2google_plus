@@ -18,10 +18,10 @@ const applyDeletedomainUser = async (logs, domainUser) => {
 
   // Canvia a les unitats EX
   let orgunit = config().organizationalUnitExStudents;
-  if (domainUser.orgUnitPath===config().organizationalUnitTeachers){
+  if (domainUser.organizationalUnit==config().organizationalUnitTeachers){
     orgunit=config().organizationalUnitExTeachers;
   }
- 
+
   // Suspendre l'usuari del domini
   oauth2ClientServiceAdmin().users.update({
     userKey: domainUser.email(),
