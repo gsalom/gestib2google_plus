@@ -124,7 +124,7 @@ const getDomainGroupsMembers = (logs, callback) => {
         groups[group].members = res
         if (membersok >= Object.keys(groups).length) {
           if (logs) {
-            logs.push(Object.keys(groups).length + ' grups carregats')
+            logs.push(Object.keys(groups).length + ' grups carregats : '+'xx'+' grups d\'alumnat '+'xx'+' grups de professorat '+'xx'+' altres grups')
           }
           return callback(null, groups)
         }
@@ -134,7 +134,7 @@ const getDomainGroupsMembers = (logs, callback) => {
 }
 
 /**
- * Retorna tots els usuaris del domini, amb inforació extra
+ * Retorna tots els usuaris del domini, amb informació extra
  */
 const getAllDomainUsers = (users, nextPageToken, callback) => {
   if (!users) {
@@ -216,7 +216,7 @@ const getDomainUsers = (logs, callback) => {
 
       // Retornam domainUsers
       if (logs) {
-        logs.push(Object.keys(domainUsers).length + ' usuaris carregats')
+        logs.push(Object.keys(domainUsers).length + ' usuaris carregats : '+'xxx'+' alumnes '+'xxx'+' professors '+'xx'+' altres usuaris')
       }
       callback(null, domainUsers, groups)
     })

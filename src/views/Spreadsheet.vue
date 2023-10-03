@@ -18,6 +18,11 @@
             <div class="col-sm-10">
               <select class="form-control" id="group" name="group" v-model="group" :disabled="loading">
                 <option value="">Tots</option>
+                <option value="alumnat.ifc">ifc*</option>
+                <option value="alumnat.com">com*</option>
+                <option value="alumnat.imp">imp*</option>
+                <option value="alumnat.san">san*</option>
+                <option value="alumnat.sea">sea*</option>
                 <option v-for="group in groupsStudents" v-bind:key="group.email" v-bind:value="group.email">
                   {{ group.nameWithEmail }}
                 </option>
@@ -85,8 +90,10 @@ export default {
           // Per cada usuari del domini...
           Object.keys(users).forEach(user => {
             if (!users[user].suspended) {
-              if (!this.onlyteachers || users[user].teacher) {
-                if (!this.group || users[user].groups.includes(this.group)) {
+             if (!this.onlyteachers || users[user].teacher) {
+                // console.log(this.group)   
+                // pròxima millora treure professorat d'un grup d'alumnes
+                if (!this.group || users[user].groups.findIndex(grup => grup.startsWith(this.group))!=-1) {
                   // Grup professorat
                   if (users[user].teacher) {
                     if (!sheetUsers['Professorat']) {
@@ -110,6 +117,7 @@ export default {
                     }
                   })
                 }
+                
               }
             }
           })
@@ -118,8 +126,20 @@ export default {
           Object.keys(sheetUsers).sort().forEach(key => {
             sheetUsersOrdered[key] = sheetUsers[key]
           })
-
-          this.filename = 'Usuaris domini ' + (new Date()).toLocaleString()
+         if (this.onlyteachers){
+          this.filename = 'Professorat '+ this.group + ' '+ (new Date()).toLocaleString()
+           // console.log(this.filename)
+         }
+          else {
+          if (!this.group){
+            this.filename = 'Usuaris domini ' + (new Date()).toLocaleString()
+           // console.log(this.filename)
+          }
+          else {
+          this.filename = 'Usuaris '+ this.group + ' '+ (new Date()).toLocaleString()
+          // console.log(this.filename)
+          }
+        }
           // Cream el full de càlcul a Google Drive
           // https://developers.google.com/sheets/api/guides/create#nodejs
           oauth2ClientServiceSheets().spreadsheets.create({

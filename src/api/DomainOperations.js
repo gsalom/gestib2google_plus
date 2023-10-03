@@ -80,7 +80,9 @@ if (apply) {
  */
 const deleteDomainUsers = (logs, xmlUsers, domainUsers, apply, selectedGroup, onlyTeachers) => {
   let countDeleted = 0
-  logs.push('Esborrant usuaris del domini...')
+  if (apply) {
+     logs.push('Esborrant usuaris del domini...')
+  }
   for (let userid in domainUsers) { // Per cada usuari del domini
     let domainUser = domainUsers[userid]
     if (!domainUser.suspended && !domainUser.withoutcode) {
