@@ -18,6 +18,7 @@
     "studentsEmailPrefix": "",
     "studentsEmailFormat": "nPS",
     "studentsEmailCustomDomain": "",
+    "ciclesPrefixGroups": ["com", "ifc", "imp", "san", "sea"],
     "departmentNumberToName": {
       "7310": "orientacio",
       "7313": "formacioiorientaciolaboral",

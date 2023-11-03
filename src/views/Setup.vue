@@ -52,6 +52,10 @@
             <option v-bind:value="true">Amb grups d'alumnes</option>
           </select>
         </div>
+        <div class="form-group">
+          <label for="ciclesPrefixGroups">Prefixes d'agrupaments de cicles</label>
+          <input class="form-control" id="ciclesPrefixGroups" name="ciclesPrefixGroups" type="text" v-model="ciclesPrefixGroups" disabled>
+        </div>
         <hr class="separator">
         <div class="alert alert-warning" role="alert">
           Per especificar el format dels emails d'alumnat i professorat es pot especificar:
@@ -118,6 +122,7 @@ export default {
       groupPrefixTeachers: '',
       groupPrefixStudents: '',
       groupPrefixTutors: '',
+      ciclesPrefixGroups:'',
       organizationalUnitTeachers: '',
       organizationalUnitStudents: '',
       organizationalUnitStudentsWithGroups: false,
@@ -136,6 +141,7 @@ export default {
     this.groupPrefixTeachers = config().groupPrefixTeachers
     this.groupPrefixStudents = config().groupPrefixStudents
     this.groupPrefixTutors = config().groupPrefixTutors
+    this.ciclesPrefixGroups= config().ciclesPrefixGroups
     this.organizationalUnitTeachers = config().organizationalUnitTeachers
     this.organizationalUnitStudents = config().organizationalUnitStudents
     this.organizationalUnitExTeachers = config().organizationalUnitExTeachers

@@ -18,11 +18,9 @@
             <div class="col-sm-10">
               <select class="form-control" id="group" name="group" v-model="group" :disabled="loading">
                 <option value="">Tots</option>
-                <option value="alumnat.ifc">ifc*</option>
-                <option value="alumnat.com">com*</option>
-                <option value="alumnat.imp">imp*</option>
-                <option value="alumnat.san">san*</option>
-                <option value="alumnat.sea">sea*</option>
+                <option v-for="prefixGroup in ciclesPrefixGroups" v-bind:key="prefixGroup" v-bind:value="'alumnat.'+prefixGroup" >
+                  {{ prefixGroup+'*' }}
+                </option>
                 <option v-for="group in groupsStudents" v-bind:key="group.email" v-bind:value="group.email">
                   {{ group.nameWithEmail }}
                 </option>
@@ -33,6 +31,10 @@
             <div class="form-check">
               <label class="form-check-label">
               <input class="form-check-input" id="onlyteachers" name="onlyteachers" type="checkbox" v-model="onlyteachers" :disabled="loading"> Només professorat</label>
+            </div>
+              <div class="form-check"> 
+              <label class="form-check-label">
+              <input class="form-check-input" id="showgroups" name="showgroups" type="checkbox" v-model="showgroups" :disabled="loading"> Afegir grups de professorat</label>
             </div>
           </div>
           <div class="form-group">
@@ -68,14 +70,17 @@ export default {
     return {
       group: '',
       onlyteachers: false,
+      showgroups: false,
       errors: [],
       loading: false,
       groupsStudents: [],
+      ciclesPrefixGroups:[],
       filename: ''
     }
   },
   mounted () {
-    this.groupsStudents = JSON.parse(sessionStorage.groupsStudents)
+    this.groupsStudents = JSON.parse(sessionStorage.groupsStudents),
+    this.ciclesPrefixGroups= config().ciclesPrefixGroups
   },
   methods: {
     spreadsheet () {
@@ -91,18 +96,28 @@ export default {
           Object.keys(users).forEach(user => {
             if (!users[user].suspended) {
              if (!this.onlyteachers || users[user].teacher) {
-                // console.log(this.group)   
-                // pròxima millora treure professorat d'un grup d'alumnes
+                //console.log(this.group)   
+                if (users[user].teacher && this.onlyteachers){
+                  this.group=this.group.replace("alumnat", "professorat");                  
+                }
+                //console.log(this.group) 
                 if (!this.group || users[user].groups.findIndex(grup => grup.startsWith(this.group))!=-1) {
                   // Grup professorat
                   if (users[user].teacher) {
                     if (!sheetUsers['Professorat']) {
                       sheetUsers['Professorat'] = []
                     }
-                    sheetUsers['Professorat'].push([
-                      users[user].surname + ', ' + users[user].name,
-                      users[user].domainemail]
-                    )
+                    // showgroups checkbox amb grups o sense
+                    if (this.showgroups) {
+                      sheetUsers['Professorat'].push([
+                        users[user].surname + ', ' + users[user].name,
+                        users[user].domainemail].concat(users[user].groups)
+                      )}
+                      else {
+                      sheetUsers['Professorat'].push([
+                        users[user].surname + ', ' + users[user].name,
+                        users[user].domainemail])
+                    }
                   }
                   // Grups alumnes
                   users[user].groups.forEach(group => {
@@ -119,6 +134,9 @@ export default {
                 }
                 
               }
+              if (users[user].teacher && this.onlyteachers){
+                  this.group=this.group.replace("professorat","alumnat");                  
+                }
             }
           })
           // Ordenam per grup
