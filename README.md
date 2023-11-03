@@ -71,6 +71,10 @@ Per anar a l'aplicació web, s'ha d'obrir l'adreça [http://localhost:8080](http
 - Millores fetes a l'alta d'usuari: afegeix l'usuari als grups que ha de ser membre, elimina el caracter _ a l'email
 - Millora feta al suspendre un usuari: l'eliminia dels grups que pertany i el canvia a l'unitat organitzativa ExAlumnat o Exprofessorat segons el cas
 - Nova vista per fer operacions massives amb els usuaris. Com purga dels usuaris desactivats que encara estan dins grups
+- Millora a la generació de full de càlcul: 
+  - agrupament per cicles
+  - professorat d'un grup o cicles
+  - grups al que pertany el professorat
 
 ## Crèdits
 
