@@ -1,7 +1,7 @@
 {
   "cifpfbmoll.eu": {
     "centerCode": "07015884",
-    "defaultPassword": "Curs202324",
+    "defaultPassword": "Curs202425",
     "groupPrefixDepartment": "dept.",
     "groupPrefixTeachers": "professorat.",
     "groupPrefixStudents": "alumnat.",
@@ -76,7 +76,7 @@
           "a": {"teacher": ["a"], "student": ["a"], "description": "1r"},
           "b": {"teacher": ["b"], "student": ["b"], "description": "2n"},
           "c": {"teacher": [], "student": ["fct"], "description": "FCT"},
-          "d": {"teacher": ["dist"], "student": ["fct"], "description": "Distància"},
+          "d": {"teacher": ["d"], "student": ["d"], "description": "Distància"},
           "e": {"teacher": [], "student": ["fct"], "description": "FCT"},
           "f": {"teacher": [], "student": [], "description": ""},
           "w": {"teacher": ["w"], "student": ["w"], "description": "1r DUAL"},

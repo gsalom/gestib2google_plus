@@ -239,7 +239,7 @@ const getNewDomainEmail = (xmlUser, domainUsers) => {
     xmlUser.domainemail = newEmail
   }
 
-  logs.push('CREAR USUARI: ' + xmlUser.toString())
+  logs.push('CREAR USUARI/A: ' + xmlUser.toString())
 
   // Afegim l'usuari que cream al diccionari de usuaris del domini
   domainUsers[xmlUser.id] = new DomainUser(

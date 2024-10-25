@@ -28,6 +28,8 @@ const normalizedName = (name) => {
     }
   })
 
+  // falla pels noms Yolanda o Ivan fica _perez
+  
   if (names.length >= 1) { // If name exists (with name or surname)
     return names[0]
   } else { // If name not exists (without name or surname)
@@ -143,7 +145,7 @@ class DomainUser {
 
   toString () {
     // toString override added to prototype of DomainUser class
-    return (this.teacher ? 'PROFESSOR ' : 'ALUMNE ') +
+    return (this.teacher ? 'PROFESSOR/A ' : 'ALUMNE/A ') +
       this.surname + ', ' +
       this.name + ' (' +
       this.email() + ') [' +
