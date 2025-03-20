@@ -54,6 +54,13 @@
           <div class="form-group">
               <div class="form-check">
                 <label class="form-check-label">
+                  <input class="form-check-input" id="onlywithexorgunit" name="onlywithexorgunit" type="checkbox" v-model="onlywithexorgunit" :disabled="loading"> Només els usuaris de les Unitats Organitzatives ExProfessorat o ExAlumnnat
+                </label>
+              </div>
+            </div>
+          <div class="form-group">
+              <div class="form-check">
+                <label class="form-check-label">
                   <input class="form-check-input" id="onlywithoutorgunit" name="onlywithoutorgunit" type="checkbox" v-model="onlywithoutorgunit" :disabled="loading"> Només els usuaris de la Unitat Organitzativa principal (/)
                 </label>
               </div>
@@ -104,6 +111,7 @@
           <table class="table table-bordered" width="100%" cellspacing="0">
             <thead>
               <tr>
+                <th>Estat</th>
                 <th>Nom</th>
                 <th>Email</th>
                 <th>Professor/Alumne</th>
@@ -124,6 +132,7 @@
                 <td colspan="5">No hi ha dades carregades</td>
               </tr>
               <tr v-for="user in users" v-bind:key="user.id">
+                <td>{{ user.suspended ? 'Suspès' : 'Actiu' }}</td>
                 <td>{{ user.surname + ', ' + user.name }}</td>
                 <td><a target='_blank' :href="'https://admin.google.com/ac/search?query='+user.domainemail">{{ user.domainemail }}</a></td>
                 <td>{{ user.teacher ? 'PROFESSOR' : 'Alumne' }}</td>
@@ -151,6 +160,7 @@ export default {
       onlyactive: false,
       onlywithoutcode: false,
       onlynotsession: false,
+      onlywithexorgunit: false,
       onlywithoutorgunit: false,
       errors: [],
       loading: false,
@@ -173,7 +183,9 @@ export default {
         if (!this.onlywiththistext || users[user].domainemail.includes(this.submail)){
             if (!this.onlywithoutcode || users[user].withoutcode || (users[user].id.length < 15)) {
               if (!this.onlynotsession || (users[user].lastLoginTime.getFullYear() < 1980)) {
-                if (!this.onlywithoutorgunit || (users[user].organizationalUnit === '/')) {
+                if (!this.onlywithexorgunit || (users[user].organizationalUnit.substring(0,3) === "/Ex")) {
+                //if (!this.onlywithexorgunit || (users[user].organizationalUnit === "/ExProfessorat")) {
+                  if (!this.onlywithoutorgunit || (users[user].organizationalUnit === '/')) {
                   if (!this.onlyteachers || users[user].teacher) {
 				  if (!this.onlystudents || !users[user].teacher) {
                     if (!this.onlyactive || !users[user].suspended) {
@@ -186,6 +198,7 @@ export default {
                     }
                   }
                 }
+              }
               }
             }
           }
