@@ -165,10 +165,10 @@
           "a": {"teacher": ["a"], "student": ["a"], "description": "1r"},
           "b": {"teacher": ["b"], "student": ["b"], "description": "2n"},
           "c": {"teacher": [], "student": ["fct"], "description": "FCT"},
-          "d": {"teacher": ["dist"], "student": [], "description": "Distància"},
+          "d": {"teacher": ["d"], "student":["d"], "description": "Distància"},
           "e": {"teacher": [], "student": ["fct"], "description": "FCT"},
           "f": {"teacher": [], "student": [], "description": ""},
-          "g": {"teacher": ["g"], "student": ["g"], "description": ""}
+          "g": {"teacher": ["g"], "student": ["g"], "description": "Distància"}
         }
       },
       "san23": {
